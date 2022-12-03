@@ -44,6 +44,7 @@ void main() {
 
   test('1 - Should call Validation with correct values', () async {
     await sut.handle(request=request);
+
     verify(() => validation.validate(value: request.toMap()));
   });
 
@@ -66,14 +67,17 @@ void main() {
 
   test('4 - Should call AddAccount with correct values', () async {
     await sut.handle(request);
+
     verify(() => addAccount.add(params: addAccountParams));
   });
 
   test('5 - Should return 403 if AddAccount returns false', () async {
-    addAccount.mockAddAccountError(error: EmailInUseError());
+    final error = EmailInUseError();
+    addAccount.mockAddAccountError(error: error);
     final httpResponse = await sut.handle(request);
 
     expect(httpResponse['statusCode'], 403);
+    expect(httpResponse['body'], error.stackTrace.toString());
   });
   
   test('6 - Should throw a ServerError if AddAccount throws', () async {
@@ -83,5 +87,12 @@ void main() {
 
     expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
     expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
+  });
+
+  test('7 - Should return 204 if valid data is provided', () async {
+    final httpResponse = await sut.handle(request);
+
+    expect(httpResponse['statusCode'], 204);
+    expect(httpResponse['body'], null);
   });
 }

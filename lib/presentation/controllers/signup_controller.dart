@@ -30,6 +30,7 @@ class SignUpController {
       if (!isValid.result) {
         return forbidden(EmailInUseError());
       }
+      return noContent();
     } on Exception catch (error) {
       throw ServerError(error.toString());
     }
