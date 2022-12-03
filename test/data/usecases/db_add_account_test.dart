@@ -32,4 +32,10 @@ void main() {
       email: addAccountParams.email
     ));
   });
+
+  test('2 - Should return true if CheckAccountByEmailRepository returns false', () async {
+    final isValid = await sut.add(addAccountParams);
+
+    expect(isValid, true);
+  });
 }

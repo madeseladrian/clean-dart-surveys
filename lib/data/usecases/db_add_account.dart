@@ -7,7 +7,8 @@ class DbAddAccount {
 
   DbAddAccount({required this.checkAccountByEmailRepository});
 
-  Future<dynamic> add(AddAccountParams params) async {
-    await checkAccountByEmailRepository.checkByEmail(email: params.email);
+  Future<bool> add(AddAccountParams params) async {
+    final isValid = await checkAccountByEmailRepository.checkByEmail(email: params.email);
+    return isValid;
   }
 }
