@@ -75,4 +75,13 @@ void main() {
 
     expect(httpResponse['statusCode'], 403);
   });
+  
+  test('6 - Should throw a ServerError if AddAccount throws', () async {
+    final error = ServerError(fakerError);
+    addAccount.mockRequestThrowsError(error: error);
+    final httpResponse = sut.handle(request=request);
+
+    expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
+    expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
+  });
 }

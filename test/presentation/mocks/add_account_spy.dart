@@ -11,4 +11,6 @@ class AddAccountSpy extends Mock implements AddAccount {
     mockAddAccountCall().thenAnswer((_) async => AddAccountEntity(result: true));
   void mockAddAccountError({required Error error}) => 
     mockAddAccountCall().thenAnswer((_) async => AddAccountEntity(result: false));
+  void mockRequestThrowsError({required Exception error}) =>
+    mockAddAccountCall().thenThrow(error);
 }
