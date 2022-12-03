@@ -32,8 +32,8 @@ class SignUpController implements Controller<SignUpControllerRequest> {
         return forbidden(EmailInUseError());
       }
       return noContent();
-    } on Exception catch (error) {
-      throw ServerError(error.toString());
+    } on Error catch (error) {
+      throw ServerError(error: error.stackTrace.toString());
     }
   }
 }

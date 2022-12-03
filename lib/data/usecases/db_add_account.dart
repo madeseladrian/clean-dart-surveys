@@ -1,9 +1,13 @@
-import 'package:clean_dart_surveys/domain/entities/add_account_entity.dart';
-import 'package:clean_dart_surveys/domain/features/features.dart';
-import 'package:clean_dart_surveys/domain/params/params.dart';
+import '../../domain/entities/entities.dart';
+import '../../domain/features/features.dart';
+import '../../domain/params/params.dart';
 
-import 'package:clean_dart_surveys/data/contracts/contracts.dart';
+import '../../data/contracts/contracts.dart';
+import '../../presentation/errors/errors.dart';
 
+enum ServerErrorCustom {
+  error
+}
 
 class DbAddAccount implements AddAccount {
   final CheckAccountByEmailRepository checkAccountByEmailRepository;
@@ -12,7 +16,11 @@ class DbAddAccount implements AddAccount {
 
   @override
   Future<AddAccountEntity> add({required AddAccountParams params}) async {
-    final isValid = await checkAccountByEmailRepository.checkByEmail(email: params.email);
-    return AddAccountEntity(result: isValid);
+    try {
+      final isValid = await checkAccountByEmailRepository.checkByEmail(email: params.email);
+      return AddAccountEntity(result: isValid);
+    } on ServerError catch (error) {
+      throw ServerError(error: error.toString());
+    }
   }
 }

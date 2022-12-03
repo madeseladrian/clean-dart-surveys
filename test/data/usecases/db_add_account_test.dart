@@ -1,3 +1,5 @@
+import 'package:clean_dart_surveys/presentation/errors/errors.dart';
+import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -10,14 +12,16 @@ import '../../domain/mocks/mocks.dart';
 import '../mocks/mocks.dart';
  
 void main() {
+  late String? fakerError;
   late AddAccountParams addAccountParams;
   late CheckAccountByEmailRepositorySpy checkAccountByEmailRepository;
   late DbAddAccount sut;
 
   setUp(() {
+    fakerError = faker.lorem.word();
     addAccountParams = mockAddAccountParams();
     checkAccountByEmailRepository = CheckAccountByEmailRepositorySpy();
-    checkAccountByEmailRepository.mockCheckAccountByEmailRepository();
+    checkAccountByEmailRepository.mockCheckAccountByEmailRepository(isValid: false);
     sut = DbAddAccount(
       checkAccountByEmailRepository: checkAccountByEmailRepository
     );
@@ -42,9 +46,18 @@ void main() {
   });
 
   test('3 - Should return false if CheckAccountByEmailRepository returns true', () async {
-    checkAccountByEmailRepository.mockCheckAccountByEmailRepositoryError();
+    checkAccountByEmailRepository.mockCheckAccountByEmailRepository(isValid: true);
     final isValid = await sut.add(params: addAccountParams);
 
     expect(isValid, AddAccountEntity(result: false));
+  });
+
+  test('4 - Should throw a ServerError if CheckAccountByEmailRepository throws', () async {
+    final error = ServerError(error: fakerError);
+    checkAccountByEmailRepository.mockCheckAccountByEmailRepositoryError(error: error);
+    final httpResponse = sut.add(params: addAccountParams);
+
+    expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
+    expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
   });
 }

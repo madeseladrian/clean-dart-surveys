@@ -1,5 +1,5 @@
 class ServerError implements Exception {
-  final String error;
+  final String? error;
 
-  ServerError(this.error);
+  ServerError({required this.error});
 }

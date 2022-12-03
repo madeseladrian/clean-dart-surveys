@@ -57,7 +57,7 @@ void main() {
   });
 
   test('3 - Should throw a ServerError if Validation throws', () async {
-    final error = ServerError(fakerError);
+    final error = ServerError(error: fakerError);
     validation.mockRequestThrowsError(error: error);
     final httpResponse = sut.handle(request: request);
 
@@ -81,7 +81,7 @@ void main() {
   });
   
   test('6 - Should throw a ServerError if AddAccount throws', () async {
-    final error = ServerError(fakerError);
+    final error = ServerError(error: fakerError);
     addAccount.mockRequestThrowsError(error: error);
     final httpResponse = sut.handle(request: request);
 
