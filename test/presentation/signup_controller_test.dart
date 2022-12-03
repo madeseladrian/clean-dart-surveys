@@ -43,7 +43,7 @@ void main() {
   });
 
   test('1 - Should call Validation with correct values', () async {
-    await sut.handle(request=request);
+    await sut.handle(request);
 
     verify(() => validation.validate(value: request.toMap()));
   });
