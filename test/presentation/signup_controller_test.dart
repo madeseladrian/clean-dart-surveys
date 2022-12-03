@@ -2,37 +2,44 @@ import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:clean_dart_surveys/domain/params/params.dart';
+
 import 'package:clean_dart_surveys/presentation/controllers/controllers.dart';
 import 'package:clean_dart_surveys/presentation/errors/errors.dart';
 import 'package:clean_dart_surveys/presentation/params/params.dart';
 
+import '../domain/mocks/mocks.dart';
 import 'mocks/mocks.dart';
  
 
 void main() {
   late String fakerError;
-  late String name;
-  late String email;
-  late String password;
   late SignUpControllerRequest request;
   late SignUpController sut;
   late ValidationSpy validation;
+  late AddAccountSpy addAccount;
+  late AddAccountParams addAccountParams;
 
   setUp(() {
     fakerError = faker.lorem.word();
-    name = faker.person.name();
-    email = faker.internet.email();
-    password = faker.internet.password();
+    addAccountParams = mockAddAccountParams();
     request = SignUpControllerRequest(
-      name: name, 
-      email: email, 
-      password: password, 
-      passwordConfirmation: password
+      name: addAccountParams.name, 
+      email: addAccountParams.email, 
+      password: addAccountParams.password, 
+      passwordConfirmation: addAccountParams.password
     );
     validation = ValidationSpy();
+    addAccount = AddAccountSpy();
+    addAccount.mockAddAccount(params: addAccountParams);
     sut = SignUpController(
-      validation: validation
+      validation: validation,
+      addAccount: addAccount
     );
+  });
+
+  setUpAll(() {
+    registerFallbackValue(mockAddAccountParams());
   });
 
   test('1 - Should call Validation with correct values', () async {
@@ -42,7 +49,7 @@ void main() {
 
   test('2 - Should return 400 if Validation returns an error', ()  async {
     validation.mockRequestError(error: MissingParamError(fakerError));
-    final httpResponse = await sut.handle(request=request);
+    final httpResponse = await sut.handle(request);
 
     expect(httpResponse['statusCode'], 400);
     expect(httpResponse['body'], 'Missing param: $fakerError');
@@ -55,5 +62,10 @@ void main() {
 
     expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
     expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
+  });
+
+  test('4 - Should call AddAccount with correct values', () async {
+    await sut.handle(request);
+    verify(() => addAccount.add(params: addAccountParams));
   });
 }

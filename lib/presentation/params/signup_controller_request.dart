@@ -1,8 +1,8 @@
 class SignUpControllerRequest {
-  final String name;
-  final String email;
-  final String password;
-  final String passwordConfirmation;
+  final String? name;
+  final String? email;
+  final String? password;
+  final String? passwordConfirmation;
 
   SignUpControllerRequest({
     required this.name,
@@ -11,7 +11,7 @@ class SignUpControllerRequest {
     required this.passwordConfirmation,
   });
 
-  Map<String, String> toMap() => {
+  Map<String?, String?> toMap() => {
     "name": name,
     "email": email,
     "password": password,
