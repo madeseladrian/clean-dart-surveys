@@ -24,7 +24,7 @@ void main() {
     checkAccountByEmailRepository = CheckAccountByEmailRepositorySpy();
     hasher = HasherSpy();
     checkAccountByEmailRepository.mockCheckAccountByEmailRepository(isValid: false);
-    hasher.mockmockHasher(password: addAccountParams.password);
+    hasher.mockMockHasher(password: addAccountParams.password);
     sut = DbAddAccount(
       checkAccountByEmailRepository: checkAccountByEmailRepository,
       hasher: hasher
@@ -69,5 +69,14 @@ void main() {
     await sut.add(params: addAccountParams);
     
     verify(() => hasher.getPasswordHash(password: addAccountParams.password));
+  });
+
+  test('6 - Should throw a ServerError if Hasher throws', () async {
+    final error = ServerError(error: fakerError);
+    hasher.mockMockHasherError(error: error);
+    final httpResponse = sut.add(params: addAccountParams);
+
+    expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
+    expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
   });
 }

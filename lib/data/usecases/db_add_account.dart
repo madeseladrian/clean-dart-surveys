@@ -5,9 +5,6 @@ import '../../domain/params/params.dart';
 import '../../data/contracts/contracts.dart';
 import '../../presentation/errors/errors.dart';
 
-enum ServerErrorCustom {
-  error
-}
 
 class DbAddAccount implements AddAccount {
   final CheckAccountByEmailRepository checkAccountByEmailRepository;
