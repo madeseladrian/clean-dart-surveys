@@ -1,7 +1,9 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+import 'package:clean_dart_surveys/domain/entities/entities.dart';
 import 'package:clean_dart_surveys/domain/params/params.dart';
+
 import 'package:clean_dart_surveys/data/usecases/usecases.dart';
 
 import '../../domain/mocks/mocks.dart';
@@ -26,7 +28,7 @@ void main() {
   });
 
   test('1 - Should call CheckAccountByEmailRepository with correct email', () async {
-    await sut.add(addAccountParams);
+    await sut.add(params: addAccountParams);
     
     verify(() => checkAccountByEmailRepository.checkByEmail(
       email: addAccountParams.email
@@ -34,8 +36,8 @@ void main() {
   });
 
   test('2 - Should return true if CheckAccountByEmailRepository returns false', () async {
-    final isValid = await sut.add(addAccountParams);
+    final isValid = await sut.add(params: addAccountParams);
 
-    expect(isValid, true);
+    expect(isValid, AddAccountEntity(result: true));
   });
 }

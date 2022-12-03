@@ -43,14 +43,14 @@ void main() {
   });
 
   test('1 - Should call Validation with correct values', () async {
-    await sut.handle(request);
+    await sut.handle(request: request);
 
     verify(() => validation.validate(value: request.toMap()));
   });
 
   test('2 - Should return 400 if Validation returns an error', ()  async {
     validation.mockRequestError(error: MissingParamError(fakerError));
-    final httpResponse = await sut.handle(request);
+    final httpResponse = await sut.handle(request: request);
 
     expect(httpResponse['statusCode'], 400);
     expect(httpResponse['body'], 'Missing param: $fakerError');
@@ -59,14 +59,14 @@ void main() {
   test('3 - Should throw a ServerError if Validation throws', () async {
     final error = ServerError(fakerError);
     validation.mockRequestThrowsError(error: error);
-    final httpResponse = sut.handle(request=request);
+    final httpResponse = sut.handle(request: request);
 
     expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
     expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
   });
 
   test('4 - Should call AddAccount with correct values', () async {
-    await sut.handle(request);
+    await sut.handle(request: request);
 
     verify(() => addAccount.add(params: addAccountParams));
   });
@@ -74,7 +74,7 @@ void main() {
   test('5 - Should return 403 if AddAccount returns false', () async {
     final error = EmailInUseError();
     addAccount.mockAddAccountError(error: error);
-    final httpResponse = await sut.handle(request);
+    final httpResponse = await sut.handle(request: request);
 
     expect(httpResponse['statusCode'], 403);
     expect(httpResponse['body'], error.stackTrace.toString());
@@ -83,14 +83,14 @@ void main() {
   test('6 - Should throw a ServerError if AddAccount throws', () async {
     final error = ServerError(fakerError);
     addAccount.mockRequestThrowsError(error: error);
-    final httpResponse = sut.handle(request=request);
+    final httpResponse = sut.handle(request: request);
 
     expect(httpResponse, throwsA(predicate((e) => e is ServerError)));
     expect(httpResponse, throwsA(predicate((e) => e.toString() == error.toString())));
   });
 
   test('7 - Should return 204 if valid data is provided', () async {
-    final httpResponse = await sut.handle(request);
+    final httpResponse = await sut.handle(request: request);
 
     expect(httpResponse['statusCode'], 204);
     expect(httpResponse['body'], null);

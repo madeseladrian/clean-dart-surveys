@@ -1,3 +1,3 @@
 abstract class Controller<T> {
-  Future<Map<String, dynamic>> handle(T request);
+  Future<Map<String, dynamic>> handle({required T request});
 }

@@ -17,7 +17,7 @@ class SignUpController implements Controller<SignUpControllerRequest> {
   });
 
   @override
-  Future<Map<String, dynamic>> handle(SignUpControllerRequest request) async {
+  Future<Map<String, dynamic>> handle({required SignUpControllerRequest request}) async {
     try {
       final error = validation.validate(value: request.toMap());
       if (error != null) {
