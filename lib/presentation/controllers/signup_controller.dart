@@ -22,11 +22,14 @@ class SignUpController {
       if (error != null) {
         return badRequest(error);
       }
-      await addAccount.add(params: AddAccountParams(
+      final isValid = await addAccount.add(params: AddAccountParams(
         name: request.name,
         email: request.email,
         password: request.password
       ));
+      if (!isValid.result) {
+        return forbidden(EmailInUseError());
+      }
     } on Exception catch (error) {
       throw ServerError(error.toString());
     }

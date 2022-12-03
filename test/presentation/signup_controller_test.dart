@@ -68,4 +68,11 @@ void main() {
     await sut.handle(request);
     verify(() => addAccount.add(params: addAccountParams));
   });
+
+  test('5 - Should return 403 if AddAccount returns false', () async {
+    addAccount.mockAddAccountError(error: EmailInUseError());
+    final httpResponse = await sut.handle(request);
+
+    expect(httpResponse['statusCode'], 403);
+  });
 }
