@@ -6,5 +6,5 @@ class AddAccountEntity extends Equatable {
   @override 
   List get props => [result];
 
-  const AddAccountEntity({this.result = false});
+  const AddAccountEntity({required this.result});
 }
