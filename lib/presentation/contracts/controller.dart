@@ -1,5 +1,3 @@
-import 'dart:io';
-
 abstract class Controller<T> {
-  Future<HttpResponse> handle(T request);
+  Future<Map<String, dynamic>> handle(T request);
 }

@@ -7,7 +7,7 @@ import '../helpers/helpers.dart';
 import '../params/params.dart';
 
 
-class SignUpController {
+class SignUpController implements Controller<SignUpControllerRequest> {
   final Validation validation;
   final AddAccount addAccount;
 
@@ -16,7 +16,8 @@ class SignUpController {
     required this.addAccount
   });
 
-  Future<dynamic> handle(SignUpControllerRequest request) async {
+  @override
+  Future<Map<String, dynamic>> handle(SignUpControllerRequest request) async {
     try {
       final error = validation.validate(value: request.toMap());
       if (error != null) {
