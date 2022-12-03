@@ -1,9 +1,10 @@
-import 'package:clean_dart_surveys/presentation/params/params.dart';
 import 'package:faker/faker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 import 'package:clean_dart_surveys/presentation/controllers/controllers.dart';
+import 'package:clean_dart_surveys/presentation/errors/errors.dart';
+import 'package:clean_dart_surveys/presentation/params/params.dart';
 import 'mocks/mocks.dart';
  
 void main() {
@@ -12,7 +13,7 @@ void main() {
   late String password;
   late SignUpControllerRequest request;
   late SignUpController sut;
-  late ValidationSpy validationSpy;
+  late ValidationSpy validation;
 
   setUp(() {
     name = faker.person.name();
@@ -24,15 +25,24 @@ void main() {
       password: password, 
       passwordConfirmation: password
     );
-    validationSpy = ValidationSpy();
+    validation = ValidationSpy();
 
     sut = SignUpController(
-      validation: validationSpy
+      validation: validation
     );
   });
 
   test('1 - Should call Validation with correct values', () async {
-    sut.handle(request=request);
-    verify(() => validationSpy.validate(value: request));
+    await sut.handle(request=request);
+    verify(() => validation.validate(value: request));
+  });
+
+  test('2 - Should return 400 if Validation returns an error', ()  async {
+    final fakerError = faker.lorem.word();
+    validation.mockRequestError(error: MissingParamError(fakerError));
+    final httpResponse = await sut.handle(request=request);
+
+    expect(httpResponse['statusCode'], 400);
+    expect(httpResponse['body'], 'Missing param: $fakerError');
   });
 }
