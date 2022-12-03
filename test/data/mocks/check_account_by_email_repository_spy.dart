@@ -8,4 +8,6 @@ class CheckAccountByEmailRepositorySpy extends Mock implements CheckAccountByEma
     when(() => checkByEmail(email: any(named: 'email')));
   void mockCheckAccountByEmailRepository() =>
     mockCheckAccountByEmailRepositoryCall().thenAnswer((_) async => true);
+  void mockCheckAccountByEmailRepositoryError() =>
+    mockCheckAccountByEmailRepositoryCall().thenAnswer((_) async => false);
 }

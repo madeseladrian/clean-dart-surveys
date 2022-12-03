@@ -40,4 +40,11 @@ void main() {
 
     expect(isValid, AddAccountEntity(result: true));
   });
+
+  test('3 - Should return false if CheckAccountByEmailRepository returns true', () async {
+    checkAccountByEmailRepository.mockCheckAccountByEmailRepositoryError();
+    final isValid = await sut.add(params: addAccountParams);
+
+    expect(isValid, AddAccountEntity(result: false));
+  });
 }
