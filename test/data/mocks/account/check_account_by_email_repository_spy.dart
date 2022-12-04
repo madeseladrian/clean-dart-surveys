@@ -1,7 +1,6 @@
-import 'package:clean_dart_surveys/data/contracts/contracts.dart';
-
 import 'package:mocktail/mocktail.dart';
 
+import 'package:clean_dart_surveys/data/contracts/contracts.dart';
 
 class CheckAccountByEmailRepositorySpy extends Mock implements CheckAccountByEmailRepository {
   When mockCheckAccountByEmailRepositoryCall() => 

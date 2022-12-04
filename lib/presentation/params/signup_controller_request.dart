@@ -1,8 +1,14 @@
-class SignUpControllerRequest {
+import 'package:equatable/equatable.dart';
+
+class SignUpControllerRequest extends Equatable {
   final String? name;
   final String? email;
   final String? password;
   final String? passwordConfirmation;
+
+  @override
+  @override 
+  List get props => [name, email, password, passwordConfirmation];
 
   SignUpControllerRequest({
     required this.name,

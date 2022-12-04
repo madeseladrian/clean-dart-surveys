@@ -6,7 +6,6 @@ import '../errors/errors.dart';
 import '../helpers/helpers.dart';
 import '../params/params.dart';
 
-
 class SignUpController implements Controller<SignUpControllerRequest> {
   final Validation validation;
   final AddAccount addAccount;

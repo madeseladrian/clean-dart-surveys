@@ -18,11 +18,10 @@ void main() {
   late SignUpController sut;
   late ValidationSpy validation;
   late AddAccountSpy addAccount;
-  late AddAccountParams addAccountParams;
+  AddAccountParams addAccountParams = mockAddAccountParams();
 
   setUp(() {
     fakerError = faker.lorem.word();
-    addAccountParams = mockAddAccountParams();
     request = SignUpControllerRequest(
       name: addAccountParams.name, 
       email: addAccountParams.email, 
@@ -39,7 +38,7 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(mockAddAccountParams());
+    registerFallbackValue(addAccountParams);
   });
 
   test('1 - Should call Validation with correct values', () async {
