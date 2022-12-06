@@ -24,7 +24,7 @@ class DbAddAccount implements AddAccount {
       var isValid = AddAccountEntity(result: false);
       
       if (!exists) {
-        final hashedPassword = await hasher.getPasswordHash(password: params.password);
+        final hashedPassword = hasher.generateHash(text: params.password!);
         final addAccountRepositoryResult = await addAccountRepository.add(
           data: AddAccountRepositoryParams(
             name: params.name, 

@@ -4,9 +4,9 @@ import 'package:clean_dart_surveys/data/contracts/contracts.dart';
 
 class HasherSpy extends Mock implements Hasher {
   When mockHasherCall() => 
-    when(() => getPasswordHash(password: any(named: 'password')));
+    when(() => generateHash(text: any(named: 'text')));
   void mockMockHasher({required String? password}) =>
-    mockHasherCall().thenAnswer((_) async => 'any_hash');
+    mockHasherCall().thenAnswer((_) => 'any_hash');
 
   void mockMockHasherError({required Exception error}) =>
     mockHasherCall().thenThrow(error);

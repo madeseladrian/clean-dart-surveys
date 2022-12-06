@@ -1,3 +1,3 @@
 abstract class Hasher {
-  Future<String?> getPasswordHash({required String? password});
+  String? generateHash({required String text});
 }

@@ -78,7 +78,7 @@ void main() {
 
     await sut.add(params: addAccountParams);
     
-    verify(() => hasher.getPasswordHash(password: addAccountParams.password));
+    verify(() => hasher.generateHash(text: addAccountParams.password!));
   });
 
   test('5 - Should throw a ServerError if Hasher throws', () async {
